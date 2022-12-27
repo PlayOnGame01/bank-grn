@@ -11,38 +11,38 @@ void FindPrintJSON(const wstring&, const wstring&);
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
-    const char* FileName = "rate.txt";
-    const char* srcURL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
-    if (S_OK == URLDownloadToFileA(NULL, srcURL, FileName, 0, NULL))
+    setlocale(LC_ALL, "Rus");
+    const char* textovi_file = "rate.txt";
+    const char* site = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
+    if (S_OK == URLDownloadToFileA(NULL, site, textovi_file, 0, NULL))
     {
-        wcout << "Information about money in the world:" << FileName;
+        wcout << "Information about money in the world:" << textovi_file;
     }
     wcout << endl << endl;
-    wifstream file(FileName, ios::in);
-    file.imbue(locale(std::locale::empty(), new codecvt_utf8<wchar_t>));
-    if (file.is_open())
+    wifstream document(textovi_file, ios::in);
+    document.imbue(locale(std::locale::empty(), new codecvt_utf8<wchar_t>));
+    if (document.is_open())
     {
         wstring buff;
-        while (!file.eof())
+        while (!document.eof())
         {
-            getline(file, buff, L'\n');
+            getline(document, buff, L'\n');
             FindPrintJSON(buff, L"txt\":");
             FindPrintJSON(buff, L"rate\":");
         }
-        file.close();
+        document.close();
     }
 }
 
 void FindPrintJSON(const wstring& sours, const wstring& find)
 {
-    int pos = -1;
+    int position = -1;
     while (true)
     {
-        pos = sours.find(find, pos + 1);
-        if (pos == wstring::npos) break;
+        position = sours.find(find, position + 1);
+        if (position == wstring::npos) break;
 
-        for (auto i = sours.begin() + pos + find.length(); i != sours.end(); ++i)
+        for (auto i = sours.begin() + position + find.length(); i != sours.end(); ++i)
         {
             if (*i == ',') break;
             wcout << *i;
